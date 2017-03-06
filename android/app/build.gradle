@@ -96,7 +96,7 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
         manifestPlaceholders = [onesignal_app_id: "c53a049f-055a-42b4-8c69-e49151507848",
-                                onesignal_google_project_number: "REMOTE"]
+                                onesignal_google_project_number: "998203094475"]
     }
     splits {
         abi {

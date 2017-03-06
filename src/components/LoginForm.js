@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, Image } from 'react-native';
+import { Text, Image, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
@@ -18,7 +18,7 @@ class LoginForm extends Component{
        
             setTimeout(()=>{
                 this.setState({ showSplashScreen: false});
-            },5000);
+            },7000);
 
     }
 
@@ -32,7 +32,14 @@ class LoginForm extends Component{
 
     onLoginUser(){
         let { email, password } = this.props;
-        this.props.loginUser({ email, password });
+         AsyncStorage.getItem('deviceInfo')
+                  .then((deviceId)=>{
+                      console.log('DeviceIDRetrieved: ', deviceId);
+                      this.props.loginUser({ email, password, deviceId });
+                  })
+                  .catch((err)=>{
+                        console.log('ERR: ', err);
+                  });
     }
 
     renderButton(){

@@ -19,7 +19,7 @@ const SplashScreen = ({ visible }) => {
                     <View style={containerStyle}>
                         <Image source={require('../img/logo-transparent.png')} style={logoStyle}/>
                         <Text style={tagline}>Intelligent Customer Service</Text>
-                        <Image source={require('../gif/loading-black.gif')} style={imageStyle}/>
+                        <Image source={require('../gif/3.gif')} style={imageStyle}/>
                         <Text style={loadingStatus}>Launching satellites...</Text>
                     </View>
                 </Image>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { AsyncStorage } from 'react-native';
 import ReduxThunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -41,7 +42,14 @@ class App extends Component {
     }
 
     onIds(device) {
-        console.log('Device info: ', device);
+        console.log('Device info here: ', device);
+        AsyncStorage.setItem('deviceInfo', device.userId)
+            .then(()=>{
+               console.log('Device Info Saved');
+            })
+            .catch((err)=>{
+                console.log('ERR: ', err);
+            });
     }
     
     
