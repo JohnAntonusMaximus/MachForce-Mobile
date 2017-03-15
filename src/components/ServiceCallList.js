@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, ScrollView, View, Text, Image, RefreshControl, Platform } from 'react-native';
+import { AsyncStorage, BackAndroid, ScrollView, View, Text, Image, RefreshControl, Platform } from 'react-native';
 import ServiceCallButton from './ServiceCallButton';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -30,6 +30,7 @@ class ServiceCallList extends Component {
             .catch((err)=>{
                 console.log('ERR: ', err);
             });
+        BackAndroid.addEventListener('hardwareBackPress', () => { return true });
     }
 
 

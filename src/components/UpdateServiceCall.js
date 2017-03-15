@@ -29,11 +29,6 @@ class UpdateServiceCall extends Component {
         this.props.clearCommModal();
     }
 
-
-    onPhonePress(){
-        console.log("Phone number press!");
-    }
-
     onModalCancel(){
         this.setState({ showCommModal: !this.state.showCommModal })
     }
