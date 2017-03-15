@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, Platform } from 'react-native';
 
 const ScrollCard = (props) => {
   return (
@@ -20,8 +20,8 @@ const styles = {
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 1,
-    marginLeft: 5,
-    marginRight: 5,
+    marginLeft: Platform.OS === 'ios' ? 0 : 5,
+    marginRight: Platform.OS === 'ios' ? 0 : 5,
     marginTop: 10
   }
 };

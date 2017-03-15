@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View, Text, Image, RefreshControl } from 'react-native';
+import { AsyncStorage, ScrollView, View, Text, Image, RefreshControl, Platform } from 'react-native';
 import ServiceCallButton from './ServiceCallButton';
 import { Actions, ActionConst } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -22,12 +22,32 @@ class ServiceCallList extends Component {
         return output;
     }
 
+    componentWillMount(){
+        AsyncStorage.setItem('userLoggedIn', 'true')
+            .then(()=>{
+               console.log('userLoggedIn Flag Set!');
+            })
+            .catch((err)=>{
+                console.log('ERR: ', err);
+            });
+    }
+
 
     componentDidMount(){
         let name    = this.props.user.technicianName;
         let token   = this.props.user.token;
 
         this.props.getServiceCalls({ token, name });
+    }
+
+    componentWillUnmount(){
+        AsyncStorage.removeItem('userLoggedIn')
+            .then(()=>{
+               console.log('userLoggedIn Flag Removed!');
+            })
+            .catch((err)=>{
+                console.log('ERR: ', err);
+            });
     }
 
     onRefresh(){
@@ -67,6 +87,7 @@ class ServiceCallList extends Component {
                         MessageID ={serviceCall.messageID.S}
                         Timestamp={serviceCall.timestamp.S}
                         CustomerName={serviceCall.customerName.S}
+                        Location={serviceCall.customerAccount.S}
                         ForService={serviceCall.productForService.S}
                         ModelNumber={serviceCall.modelNumber.S}
                         RequestDate={moment(serviceCall.timestamp.S).format('MMMM Do YYYY')}
@@ -81,7 +102,7 @@ class ServiceCallList extends Component {
 
     render(){
         return(
-            <ScrollView 
+            <ScrollView style={styles.ios.container}
                 refreshControl={
                     <RefreshControl
                         refreshing={this.props.isRefreshing}
@@ -125,6 +146,11 @@ const styles = {
         justifyContent: 'center',
         alignSelf: 'center',
         fontSize: 20,
+    },
+    ios: {
+        container: {
+            marginTop: Platform.OS === 'ios' ? 20 : null
+        }
     }
 }
 

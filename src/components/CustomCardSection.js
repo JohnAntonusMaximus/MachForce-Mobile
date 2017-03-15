@@ -1,9 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
 
-const CustomCardSection = (props) => {
+const CustomCardSection = (props, customStyle) => {
   return (
-    <View style={[styles.containerStyle, props.style]}>
+    <View style={[styles.containerStyle, props.style, customStyle]}>
       {props.children}
     </View>
   );

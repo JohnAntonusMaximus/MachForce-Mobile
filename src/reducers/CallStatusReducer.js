@@ -19,7 +19,8 @@ const INITIAL_STATE = {
     ForService: '', 
     ModelNumber: '', 
     CallStatus: 'Open', 
-    Notes: '', 
+    Notes: '',
+    Location: '', 
     Loading: false, 
     Error: '',
     ShowCommModal: false,
@@ -40,7 +41,8 @@ export default (state = INITIAL_STATE, action) => {
                     ForService: action.payload.ForService,
                     ModelNumber: action.payload.ModelNumber,
                     CallStatus: action.payload.CallStatus, 
-                    Notes: action.payload.Notes 
+                    Notes: action.payload.Notes,
+                    Location: action.payload.Location 
                 });
         case SERVICE_CALL_UPDATE:
             return {...state, [action.payload.prop]: action.payload.value }

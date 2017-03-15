@@ -51,25 +51,25 @@ export const refreshServiceCalls = ({ token, name}) => {
 
 export const editServiceCall = (action) => {
     console.log('EDIT_SERVICE_ACTION->',action);
-    let { MessageID, Timestamp, RequestTime, RequestDate, CustomerName, CallbackNumber, ForService, ModelNumber, CallStatus, Notes } = action;
+    let { MessageID, Timestamp, RequestTime, RequestDate, CustomerName, CallbackNumber, ForService, ModelNumber, CallStatus, Notes, Location } = action;
     
     return (dispatch) => {
         dispatch({
             type: EDIT_SERVICE_CALL,
-            payload:  { MessageID, Timestamp, RequestTime, RequestDate, CustomerName, CallbackNumber, ForService, ModelNumber, CallStatus, Notes } 
+            payload:  { MessageID, Timestamp, RequestTime, RequestDate, CustomerName, CallbackNumber, ForService, ModelNumber, CallStatus, Notes, Location } 
         });
         Actions.updateServiceCall();
     };
 } 
 
-export const saveChanges = ( token, technicianName, MessageID, Timestamp, CallStatus, Notes ) => {
+export const saveChanges = ( token, technicianName, MessageID, Timestamp, CallStatus, Notes, Location ) => {
 
     return (dispatch) => {
         dispatch({ type: SAVE_CHANGES, payload: true });
 
         const POST_URL = '/mobile/updateCall';
 
-        const BODY = { technicianName, MessageID, Timestamp, CallStatus, Notes };
+        const BODY = { technicianName, MessageID, Timestamp, CallStatus, Notes, Location };
 
         console.log(BODY);
 
@@ -87,7 +87,7 @@ export const saveChanges = ( token, technicianName, MessageID, Timestamp, CallSt
                 Actions.reload({ type: ActionConst.RESET })
             }, 1000);
         })
-        .catch(error =>  updateFail(dispatch, 'Error saving changes, please try again!'));
+        .catch(error =>  updateFail(dispatch, 'Error saving changes, check your connectivity.'));
     };
 };
 
