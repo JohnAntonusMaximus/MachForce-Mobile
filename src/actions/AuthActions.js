@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Actions } from 'react-native-router-flux';
 import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGIN_USER, PHONE_CHANGED, NAME_CHANGED, LOGOUT_USER } from './types';
 
-axios.defaults.baseURL = 'http://api.machforce.io';
+axios.defaults.baseURL = 'https://api.machforce.io';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const emailChanged = (text) => {
@@ -38,6 +38,7 @@ export const loginUser = ({ email, password, deviceId }) => {
                 axios({
                     method: 'post',
                     url: POST_URL,
+                    timeout: 10000,
                     data: BODY
                 })
                 .then((response) => {
@@ -58,10 +59,10 @@ export const loginUser = ({ email, password, deviceId }) => {
                     }
                 })
                 .catch((error) => {
-                    if(error.response.status === 403){
+                    if(error.response){
                         loginUserFail(dispatch, error.response.data);
                     } else {
-                        loginUserFail(dispatch, 'Login Failed. Please check your credentials.');
+                        loginUserFail(dispatch, 'Nothing was sent. Please check your connectivity.');
                     }
                 });
             

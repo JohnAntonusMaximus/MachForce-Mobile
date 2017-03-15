@@ -1,7 +1,6 @@
 import React from 'react';
 import { Scene, Router, Actions } from 'react-native-router-flux';
 import  LoginForm  from './components/LoginForm';
-import { logoutUser } from './actions';
 import ServiceCallList from './components/ServiceCallList';
 import UpdateServiceCall from './components/UpdateServiceCall';
 import SplashScreen from './components/SplashScreen';
@@ -18,8 +17,12 @@ const RouterComponent = () => {
                 <Scene key="reloadPage" component={ReloadModal} title="Saving Changes..." />
             </Scene>
 
-            <Scene key="main" direction="vertical" >
-                <Scene key="serviceCallList" component={ServiceCallList} title="My Service Calls" rightTitle="Log Out" onRight={() => { console.log('push')} }  />
+            <Scene key="pushReload" direction="vertical" >
+                <Scene key="pushReloadPage" component={ReloadModal} title="Loading..." />
+            </Scene>
+
+            <Scene key="main" direction="vertical">
+                <Scene key="serviceCallList" component={ServiceCallList} title="My Service Calls" panHandlers={null} rightTitle="Log Out" onRight={() => { console.log('push')} }  />
             </Scene>
             
             <Scene key="updateServiceCall" direction="vertical" >

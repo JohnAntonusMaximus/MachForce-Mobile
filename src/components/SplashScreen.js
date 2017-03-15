@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Modal } from 'react-native';
+import { View, Text, Image, Modal, Platform } from 'react-native';
 
 const SplashScreen = ({ visible }) => {
 
@@ -43,10 +43,13 @@ const styles = {
     },
     imageStyle: {
         width: 200,
-        height: 200
+        height: 200,
+        borderRadius: 15,
+        overflow: Platform.OS === 'ios' ? 'hidden' : null
     },
     tagline:{
         color: '#fff',
+        backgroundColor: 'rgba(0,0,0,0)',
         fontSize: 18,
         fontWeight: 'bold',
         paddingTop: 29
@@ -54,6 +57,7 @@ const styles = {
     loadingStatus: {
         marginBottom: 50,
         color: '#fff',
+        backgroundColor: 'rgba(0,0,0,0)',
         fontFamily: 'Roboto',
         fontSize: 18,
         fontWeight: 'bold',

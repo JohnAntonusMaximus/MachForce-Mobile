@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { Text, Image, AsyncStorage } from 'react-native';
+import { Text, Image, AsyncStorage, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, CardSection, Input, Button, Spinner } from './common';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 import SplashScreen from './SplashScreen';
 import CustomCard from './CustomCard';
 import CustomCardSection from './CustomCardSection';
-
-
 
 
 class LoginForm extends Component{
@@ -59,7 +57,7 @@ class LoginForm extends Component{
     render(){
         
     const backgroundImage = require('../img/1.jpg');
-    const { logoStyle, errorTextStyle, backgroundImageStyle, card, inputStyle, labelStyle, inputContainerStyle } = styles;
+    const { logoStyle, errorTextStyle, backgroundImageStyle, card, inputStyle, labelStyle, inputContainerStyle, customCardSectionStyleIOS } = styles;
 
         return(
             <Image source={backgroundImage} style={backgroundImageStyle} >
@@ -72,6 +70,7 @@ class LoginForm extends Component{
                             label="Email"
                             onChangeText={this.onEmailChange.bind(this)}
                             value={this.props.email}
+                            keyboard="email-address"
                             customInputStyle={inputStyle}
                             customLabelStyle={labelStyle}
                             customContainerStyle={inputContainerStyle}
@@ -93,7 +92,7 @@ class LoginForm extends Component{
                     <CustomCardSection>
                         {this.renderButton()}
                     </CustomCardSection>
-                    <CustomCardSection>
+                    <CustomCardSection customStyle={customCardSectionStyleIOS}>
                         <Text style={errorTextStyle}>{this.props.error}</Text>
                     </CustomCardSection>
             </CustomCard>
@@ -108,7 +107,8 @@ const styles = {
         alignSelf: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        color: 'red'
+        color: 'red',
+        flex: 1
     },
     backgroundImageStyle:{
         flex: 1,
@@ -144,6 +144,14 @@ const styles = {
     },
     spinnerStyle: {
         marginTop: 15
+    },
+    customCardSectionStyleIOS: {
+        flex: 1,
+        justifyContent: Platform.OS === 'ios' ? 'center': null,
+        alignItems: 'center',
+        textAlign: 'center',
+        alignSelf: 'center',
+        paddingLeft: 15
     }
 }
 

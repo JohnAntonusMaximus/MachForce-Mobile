@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Picker, Text, TouchableOpacity } from 'react-native';
+import { Picker, Text, TouchableOpacity, Platform } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
+import ModalPicker from 'react-native-modal-picker';
 import { serviceCallUpdate, saveChanges, clearError, showCommModal, clearCommModal } from '../actions';
 import {
     CardSection,
@@ -28,11 +29,6 @@ class UpdateServiceCall extends Component {
         this.props.clearCommModal();
     }
 
-
-    onPhonePress(){
-        console.log("Phone number press!");
-    }
-
     onModalCancel(){
         this.setState({ showCommModal: !this.state.showCommModal })
     }
@@ -46,26 +42,53 @@ class UpdateServiceCall extends Component {
         const token             = this.props.user.token;
         const technicianName    = this.props.user.technicianName;
 
-        const { MessageID, Timestamp, CallStatus, Notes} = this.props;
+        const { MessageID, Timestamp, CallStatus, Notes, Location} = this.props;
 
-        this.props.saveChanges(token, technicianName, MessageID, Timestamp, CallStatus, Notes );
+        this.props.saveChanges(token, technicianName, MessageID, Timestamp, CallStatus, Notes, Location );
     }
 
-    renderSaveButton(){
+    renderSaveButton(buttonStyle){
         if(this.props.Loading === false){
             return <Button 
                     onPress={ this.onSave.bind(this) }
+                    customButtonStyle={buttonStyle}
                     >Save</Button>
         } else {
             return <Spinner />
         }
     }
 
+    renderPicker(CallStatus, picker, serviceCallUpdate){
+        if(Platform.OS === 'ios'){
+            return(
+                <ModalPicker
+                    style={{ flex: 2, borderColor: '#1E90FF' }}
+                    selectTextStyle={{ fontWeight: 'bold' }}
+                    initValue={CallStatus}
+                    data={ [{ key: 'Open', label: 'Open' },{ key: 'Hold', label: 'On Hold' },{ key: 'Closed', label: 'Closed' }] }
+                    onChange={ value => serviceCallUpdate({ prop: 'CallStatus', value: value.key }) }
+                />
+            );
+        } else {
+            return(
+                <Picker 
+                            selectedValue={CallStatus}
+                            onValueChange={ value => serviceCallUpdate({ prop: 'CallStatus', value })}
+                            style={picker}  
+                >
+                            <Picker.Item label="Open" value="Open" />
+                            <Picker.Item label="On Hold" value="Hold" />
+                            <Picker.Item label="Closed" value="Closed" />
+                </Picker>
+            );
+        }
+    }
+
     render(){
         // Styles
-        const { noteInputStyle, noteContainerStyle, picker, pickerTextStyle, customContainerStyle } = styles;
+        const { noteInputStyle, noteContainerStyle, picker, pickerTextStyle, customContainerStyle, button } = styles;
         // Props
-        const { ShowCommModal, CallbackNumber, ShowErrorModal, Error, MessageID, Timestamp, CustomerName, ForService, ModelNumber, CallStatus, serviceCallUpdate, Notes, RequestDate, RequestTime} = this.props;
+        const { ShowCommModal, CallbackNumber, ShowErrorModal, Error, MessageID, Timestamp, CustomerName, ForService, ModelNumber, CallStatus, serviceCallUpdate, Notes, RequestDate, RequestTime, Location} = this.props;
         
         return(
             <ScrollCard>
@@ -75,6 +98,13 @@ class UpdateServiceCall extends Component {
                     <CustomerInfo 
                         label="Customer"
                         value={CustomerName}
+                    />
+                </CardSection>
+
+                <CardSection>
+                    <CustomerInfo  
+                        label="Location"
+                        value={Location}
                     />
                 </CardSection>
 
@@ -102,15 +132,7 @@ class UpdateServiceCall extends Component {
 
                 <CardSection>
                     <Text style={pickerTextStyle}>Status</Text>
-                    <Picker 
-                            selectedValue={CallStatus}
-                            onValueChange={ value => serviceCallUpdate({ prop: 'CallStatus', value })}
-                            style={picker}  
-                    >
-                            <Picker.Item label="Open" value="Open" />
-                            <Picker.Item label="On Hold" value="Hold" />
-                            <Picker.Item label="Closed" value="Closed" />
-                    </Picker>
+                    {this.renderPicker(CallStatus, picker, serviceCallUpdate)}
                 </CardSection>
 
                 <CardSection customContainerStyle={noteContainerStyle}>
@@ -127,11 +149,11 @@ class UpdateServiceCall extends Component {
                 </CardSection>
 
                 <CardSection>
-                    {this.renderSaveButton()}
+                    {this.renderSaveButton(button)}
                 </CardSection>
 
                 <CardSection>
-                    <Button onPress={() => Actions.main({ type: ActionConst.POP_AND_REPLACE })}>Cancel</Button>
+                    <Button customButtonStyle={button} onPress={() => Actions.main({ type: ActionConst.POP_AND_REPLACE }) }>Cancel</Button>
                 </CardSection>
             </ScrollCard>
         );
@@ -148,18 +170,21 @@ const styles = {
         flex: 1,
         paddingTop: 10
     },
-    
     customContainerStyle: {
         height: 150
     },
     noteInputStyle: {
-        height: 150
+        height: 150,
+        paddingTop: Platform.OS === 'ios' ? 50 : 35
+    },
+    button: {
+        overflow: Platform.OS === 'ios' ? 'hidden' : null
     }
 };
 
 
 const mapStateToProps = ({ call, auth }) => {
-    let { CustomerName, CallbackNumber, ForService, ModelNumber, CallStatus, Notes, Loading, Error, ShowCommModal, ShowErrorModal, MessageID, Timestamp, RequestTime, RequestDate } = call;
+    let { CustomerName, CallbackNumber, ForService, ModelNumber, CallStatus, Notes, Loading, Error, ShowCommModal, ShowErrorModal, MessageID, Timestamp, RequestTime, RequestDate, Location } = call;
     let { user } = auth;
     return({
         MessageID,
@@ -171,7 +196,8 @@ const mapStateToProps = ({ call, auth }) => {
         ForService, 
         ModelNumber, 
         CallStatus, 
-        Notes, 
+        Notes,
+        Location, 
         Loading, 
         Error, 
         ShowCommModal, 
