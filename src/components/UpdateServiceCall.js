@@ -175,7 +175,7 @@ const styles = {
     },
     noteInputStyle: {
         height: 150,
-        paddingTop: 50
+        paddingTop: Platform.OS === 'ios' ? 50 : 35
     },
     button: {
         overflow: Platform.OS === 'ios' ? 'hidden' : null
