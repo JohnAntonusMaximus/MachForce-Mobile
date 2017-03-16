@@ -3,7 +3,7 @@ import { CALL_FETCH, CALL_FETCH_FAIL, CALL_FETCH_SUCCESS, RERENDER } from '../ac
 const INITIAL_STATE = { serviceCalls: [], error: '', loading: false, isRefreshing: false };
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action.type);
+   
     switch(action.type){
         case CALL_FETCH:
             return {...state, loading: action.payload };

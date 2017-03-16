@@ -71,8 +71,6 @@ export const saveChanges = ( token, technicianName, MessageID, Timestamp, CallSt
 
         const BODY = { technicianName, MessageID, Timestamp, CallStatus, Notes, Location };
 
-        console.log(BODY);
-
         axios({
             method: 'post',
             url: POST_URL,

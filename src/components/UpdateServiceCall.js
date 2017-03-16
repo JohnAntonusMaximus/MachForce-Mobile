@@ -38,7 +38,6 @@ class UpdateServiceCall extends Component {
     }
 
     onSave(){
-        console.log(this.props.Notes);
         const token             = this.props.user.token;
         const technicianName    = this.props.user.technicianName;
 

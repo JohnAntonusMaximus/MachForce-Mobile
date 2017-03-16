@@ -26,6 +26,9 @@ class App extends Component {
         OneSignal.addEventListener('registered', this.onRegistered);
         OneSignal.addEventListener('ids', this.onIds);
 
+        AsyncStorage.removeItem('userLoggedIn')
+            .catch((err)=> console.log('ERR'));
+
         // ERASE THIS CODE AND PUT THE ASYNCBACK INTO onIds FUNCTION WHEN TESTING ON AN ACTUAL DEVICE //
         //const device = { userId: '7776-56tyguh7567-yyyuiuhdasdj' }; // Erase this when deploying
         // AsyncStorage.setItem('deviceInfo', device.userId)
@@ -48,7 +51,7 @@ class App extends Component {
 
     onReceived(notification) {
         // console.log("Notification received: ", notification);
-        console.log('MESSAGE RECEIVED!! Set content-available flag to 1') // this is fired when a service call comes in and the user is already IN the app in foreground
+       // this is fired when a service call comes in and the user is already IN the app in foreground
     }
 
     onOpened(openResult) {
@@ -63,24 +66,21 @@ class App extends Component {
                     Actions.pushReload({ type: ActionConst.RESET });
                 }
             })
-            .catch((err)=> console.log('NO USER SET! BAM!'));
-            // We want to call this only if either user is set OR currentScene is not auth. We can't access redux state above the Provider wrapper, 
+            .catch((err)=> console.log('No User Set'));
+             // We want to call this only if either user is set OR currentScene is not auth. We can't access redux state above the Provider wrapper, 
              // this is fired when the user actually clicks the notifcations from the notifcation center.
         
     }
 
     onRegistered(notifData) {
-        console.log("Device had been registered for push notifications!", notifData);
+        //console.log("Device had been registered for push notifications!", notifData);
     }
 
     onIds(device) {
         
         AsyncStorage.setItem('deviceInfo', device.userId)
-            .then(()=>{
-               console.log('Device Info Saved');
-            })
             .catch((err)=>{
-                console.log('ERR: ', err);
+                console.log('ERR');
             });
     }
     

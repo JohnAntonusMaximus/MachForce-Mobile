@@ -24,11 +24,8 @@ class ServiceCallList extends Component {
 
     componentWillMount(){
         AsyncStorage.setItem('userLoggedIn', 'true')
-            .then(()=>{
-               console.log('userLoggedIn Flag Set!');
-            })
             .catch((err)=>{
-                console.log('ERR: ', err);
+                console.log('ERR');
             });
         BackAndroid.addEventListener('hardwareBackPress', () => { return true });
     }
@@ -43,11 +40,8 @@ class ServiceCallList extends Component {
 
     componentWillUnmount(){
         AsyncStorage.removeItem('userLoggedIn')
-            .then(()=>{
-               console.log('userLoggedIn Flag Removed!');
-            })
             .catch((err)=>{
-                console.log('ERR: ', err);
+                console.log('ERR');
             });
     }
 

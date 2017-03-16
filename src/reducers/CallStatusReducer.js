@@ -28,7 +28,6 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-    console.log(action);
     switch(action.type){
         case EDIT_SERVICE_CALL:
             return ({...state,

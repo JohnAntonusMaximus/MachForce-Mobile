@@ -32,8 +32,6 @@ export const loginUser = ({ email, password, deviceId }) => {
 
                 const BODY = { email: emailStrip, password: passwordStrip, deviceId };
 
-                console.log('InACtion: ', deviceId);
-
                 
                 axios({
                     method: 'post',
@@ -42,10 +40,7 @@ export const loginUser = ({ email, password, deviceId }) => {
                     data: BODY
                 })
                 .then((response) => {
-                    console.log(response);
                     if(response.data.technicianName){
-                        console.log('RETRIEVED TECH NAME: ', response.data.technicianName);
-                        console.log('RETRIEVED TOKEN: ', response.data.token)
                         // AsyncStorage.setItem('technicianName', response.data.technicianName)
                         //     .then(AsyncStorage.setItem('token', response.data.token))
                         //     .then(loginUserSuccess(dispatch, response.data));

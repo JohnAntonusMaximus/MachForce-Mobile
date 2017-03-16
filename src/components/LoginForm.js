@@ -32,11 +32,10 @@ class LoginForm extends Component{
         let { email, password } = this.props;
          AsyncStorage.getItem('deviceInfo')
                   .then((deviceId)=>{
-                      console.log('DeviceIDRetrieved: ', deviceId);
                       this.props.loginUser({ email, password, deviceId });
                   })
                   .catch((err)=>{
-                        console.log('ERR: ', err);
+                        console.log('ERR');
                   });
     }
 
