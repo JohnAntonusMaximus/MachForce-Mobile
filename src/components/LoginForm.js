@@ -17,7 +17,7 @@ class LoginForm extends Component{
        
             setTimeout(()=>{
                 this.setState({ showSplashScreen: false});
-            },1000);
+            },7000);
 
             AsyncStorage.getItem('rememberMeEmail')
             .then((email) => this.props.emailChanged(email))
