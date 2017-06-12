@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Text, Image, AsyncStorage, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Card, CardSection, Input, Button, Spinner } from './common';
-import { emailChanged, passwordChanged, loginUser } from '../actions';
+import { emailChanged, passwordChanged, rememberMeChanged, loginUser } from '../actions';
 import SplashScreen from './SplashScreen';
 import CustomCard from './CustomCard';
 import CustomCardSection from './CustomCardSection';
+import CheckBox from 'react-native-checkbox';
 
 
 class LoginForm extends Component{
@@ -16,8 +17,15 @@ class LoginForm extends Component{
        
             setTimeout(()=>{
                 this.setState({ showSplashScreen: false});
-            },7000);
+            },1000);
 
+            AsyncStorage.getItem('rememberMeEmail')
+            .then((email) => this.props.emailChanged(email))
+            .catch((err)=> console.log(err));
+
+            AsyncStorage.getItem('rememberMePassword')
+            .then((password) => this.props.passwordChanged(password))
+            .catch((err)=> console.log(err));
     }
 
     onEmailChange(text){
@@ -28,11 +36,16 @@ class LoginForm extends Component{
         this.props.passwordChanged(text);
     }
 
+    onRememberMeChange(checked){
+        console.log('Check is: ', checked);
+        this.props.rememberMeChanged(checked);
+    }
+
     onLoginUser(){
-        let { email, password } = this.props;
+        let { email, password, rememberMe } = this.props;
          AsyncStorage.getItem('deviceInfo')
                   .then((deviceId)=>{
-                      this.props.loginUser({ email, password, deviceId });
+                      this.props.loginUser({ email, password, rememberMe, deviceId });
                   })
                   .catch((err)=>{
                         console.log('ERR');
@@ -56,7 +69,7 @@ class LoginForm extends Component{
     render(){
         
     const backgroundImage = require('../img/1.jpg');
-    const { logoStyle, errorTextStyle, backgroundImageStyle, card, inputStyle, labelStyle, inputContainerStyle, customCardSectionStyleIOS } = styles;
+    const { logoStyle, errorTextStyle, backgroundImageStyle, card, inputStyle, labelStyle, checkBoxContainerStyle, checkBoxLabelStyle,checkBoxStyle, inputContainerStyle, customCardSectionStyleIOS } = styles;
 
         return(
             <Image source={backgroundImage} style={backgroundImageStyle} >
@@ -87,6 +100,19 @@ class LoginForm extends Component{
                             secureTextEntry
                         />
                     </CustomCardSection>
+
+                    <CustomCardSection >
+                        <CheckBox
+                            label='Remember Me'
+                            labelStyle={checkBoxLabelStyle}
+                            checkBoxStyle={checkBoxStyle}
+                            containerStyle={checkBoxContainerStyle}
+                            underlayColor='#000000'
+                            onChange={(checked)=> this.onRememberMeChange(!checked) } // This is inverse for some reason
+                        />
+                    </CustomCardSection>
+
+                    
 
                     <CustomCardSection>
                         {this.renderButton()}
@@ -131,6 +157,17 @@ const styles = {
         borderRadius: 4,
         color: '#fff'
     },
+    checkBoxStyle: { 
+        width: 155
+    },
+    checkBoxLabelStyle: {
+        width: 155
+    },
+    checkBoxContainerStyle: {
+        paddingLeft: 20,
+        paddingTop: 10,
+        width: 310
+    },
     buttonTextStyle: {
         color: '#fff'
     },
@@ -155,13 +192,14 @@ const styles = {
 }
 
 const mapStateToProps = ({ auth }) => {
-    let { email, password, error, loading } = auth;
+    let { email, password, rememberMe, error, loading } = auth;
     return {
         email,
-        password, 
+        password,
+        rememberMe, 
         error,
         loading
     };
 };
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged, loginUser })(LoginForm);
+export default connect(mapStateToProps, { emailChanged, passwordChanged, rememberMeChanged,loginUser })(LoginForm);

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Actions } from 'react-native-router-flux';
-import { EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGIN_USER, PHONE_CHANGED, NAME_CHANGED, LOGOUT_USER } from './types';
+import { EMAIL_CHANGED, PASSWORD_CHANGED, REMEMBER_ME_CHANGED,LOGIN_USER_SUCCESS, LOGIN_USER_FAIL, LOGIN_USER, PHONE_CHANGED, NAME_CHANGED, LOGOUT_USER } from './types';
+import { AsyncStorage } from 'react-native';
 
 axios.defaults.baseURL = 'https://api.machforce.io';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
@@ -19,7 +20,14 @@ export const passwordChanged = (text) => {
     });
 };
 
-export const loginUser = ({ email, password, deviceId }) => {
+export const rememberMeChanged = (checked) => {
+    return({
+        type: REMEMBER_ME_CHANGED,
+        payload: checked
+    });
+};
+
+export const loginUser = ({ email, password, rememberMe, deviceId }) => {
 
           return (dispatch) => {
                 dispatch({ type: LOGIN_USER, payload: true })
@@ -44,11 +52,20 @@ export const loginUser = ({ email, password, deviceId }) => {
                         // AsyncStorage.setItem('technicianName', response.data.technicianName)
                         //     .then(AsyncStorage.setItem('token', response.data.token))
                         //     .then(loginUserSuccess(dispatch, response.data));
-                        
-                        loginUserSuccess(dispatch, response.data);
-                        setTimeout(function() {
-                            Actions.main();
-                        }, 500);
+                        if(rememberMe === true){
+                            console.log('Remember Me is true!!');
+                            AsyncStorage.setItem('rememberMeEmail', email)
+                            .then(AsyncStorage.setItem('rememberMePassword', password))
+                            .then(loginUserSuccess(dispatch, response.data))
+                            .then(setTimeout(function() {
+                                Actions.main();
+                            }, 500));
+                        } else {
+                            loginUserSuccess(dispatch, response.data);
+                            setTimeout(function() {
+                                Actions.main();
+                            }, 500);
+                        }
                     } else {
                         loginUserFail(dispatch, 'Login Failed. Please check your credentials.');
                     }

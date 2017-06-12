@@ -85,7 +85,7 @@ class UpdateServiceCall extends Component {
 
     render(){
         // Styles
-        const { noteInputStyle, noteContainerStyle, picker, pickerTextStyle, customContainerStyle, button } = styles;
+        const { noteInputStyle, noteLabelStyle, noteContainerStyle, picker, pickerTextStyle, customContainerStyle, button } = styles;
         // Props
         const { ShowCommModal, CallbackNumber, ShowErrorModal, Error, MessageID, Timestamp, CustomerName, ForService, ModelNumber, CallStatus, serviceCallUpdate, Notes, RequestDate, RequestTime, Location} = this.props;
         
@@ -142,6 +142,7 @@ class UpdateServiceCall extends Component {
                         value={Notes}
                         customContainerStyle={customContainerStyle}
                         customInputStyle={noteInputStyle}
+                        customLabelStyle={noteLabelStyle}
                         multiline={true}
                         numberOfLines = {4}
                     />
@@ -170,11 +171,17 @@ const styles = {
         paddingTop: 10
     },
     customContainerStyle: {
-        height: 150
+        height: 100
     },
     noteInputStyle: {
-        height: 150,
-        paddingTop: Platform.OS === 'ios' ? 50 : 35
+        height: 75,
+        paddingTop: Platform.OS === 'ios' ? 10 : 10
+    },
+    noteContainerStyle: {
+
+    },
+    noteLabelStyle: {
+
     },
     button: {
         overflow: Platform.OS === 'ios' ? 'hidden' : null
